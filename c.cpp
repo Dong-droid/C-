@@ -1,18 +1,35 @@
 #include <iostream>
 #include <algorithm>
+#include <list>
+#include <vector>
 
 using namespace std;
 
 int main() {
-    int a[20] = { 1, 2, 3, 4, 5 ,6,7 };
-    int b, c;
-    for (int i = 0; i < 10; i++)
-    {
-        cin >> b >> c;
-        reverse(a + b, a + c);
+    int n, k;
+    cin >> n >> k;
+    vector<int> vec;
+    vector<int> v;
+    for (int i = 0; i < n; i++) {
+        vec.push_back(i + 1);
+         cout << vec[i]; 
     }
-
-    for (int k : a)
-        cout << k;
+        
+    for (int i = 0; i < n; i++) {
+        
+        if (i == n - 1) {
+            i = 0;
+        }
+        if (v.size() == n)
+            break; 
+        v.push_back(vec[k]);
+        vec.erase(vec.begin() + (k-1));
+    }
+    for (int i = 0; i < v.size();i++) {
+        if (i == 0)
+            cout << "<" << v[i] << ",";
+        else if (i == v.size()-1) cout << v[i] << ">";
+        else cout << v[i] << ",";
+    }
     return 0;
 }
