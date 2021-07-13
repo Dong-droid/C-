@@ -1,0 +1,31 @@
+##캠핑
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
+public class Main {
+   	    public static void main(String[] args) throws IOException {	     	
+    	 BufferedReader  br = new BufferedReader(new InputStreamReader(System.in));
+    	 int i=1;
+    		
+    		while(true) { 
+    		 String line=br.readLine();
+    		 String [] str=line.split(" ");
+    		 int L=Integer.parseInt(str[0]);                
+    		 if(L==0) break;                
+    		 int P=Integer.parseInt(str[1]);
+    		 int V=Integer.parseInt(str[2]);
+    		 
+    		 int days=0;    		
+    		if(V%P>L)
+    		   days=L+V/P*L;	
+    		else 
+    			days=V/P*L+V%P;
+    		 System.out.println("Case "+ i++ +": "+days); //bufferedwriter을 사용하면 1000단위로 콤마가 찍힘! 따라서 콤마를 없애려면 System.out.println 사용
+    		} 		 
+    		 br.close();
+    	    	
+      }
+}
