@@ -101,7 +101,7 @@ int main()
 	singly_ll sll = { 1,2,3 };
 	sll.push_front(0);
 
-	std::cout << "√ππ¯¬∞ ∏ÆΩ∫∆Æ:";
+	std::cout << "Ï≤´Î≤àÏß∏ Î¶¨Ïä§Ìä∏:";
 	for (auto i : sll)
 		std::cout << i << " ";
 	std::cout << std::endl;
@@ -109,14 +109,65 @@ int main()
 	auto sll2 = sll;
 	sll2.push_front(-1);
 	std::push_front(-1);
-	std::cout << "√ππ¯¬∞ ∏ÆΩ∫∆Æ∏¶ ∫πªÁ«— »ƒ,∏« æ’ø° -1¿ª √ﬂ∞°";
+	std::cout << "Ï≤´Î≤àÏß∏ Î¶¨Ïä§Ìä∏Î•º Î≥µÏÇ¨Ìïú ÌõÑ,Îß® ÏïûÏóê -1ÏùÑ Ï∂îÍ∞Ä";
 	for (auto i : sll2)
 		std::cout << i << ' ';
 	std::cout << std::endl;
-	std::cout << "±Ì¿∫ ∫πªÁ »ƒ √π π¯¬∞ ∏ÆΩ∫∆Æ:";
+	std::cout << "ÍπäÏùÄ Î≥µÏÇ¨ ÌõÑ Ï≤´ Î≤àÏß∏ Î¶¨Ïä§Ìä∏:";
 
 	for (auto i : sll)
 		std::cout << i << ' ';
 	std::cout << std::endl;
 
+}
+
+##vector,pair Ïó∞Ïäµ
+##Ï≤ºÏãúÎ•º ÎèÑÏôÄÏ§ò
+
+#include<iostream>
+#include<utility>
+#include<string>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+int main(){
+    
+    int a,b,n;
+    string str;
+    vector<pair<int,string>> v;
+    cin>>n;
+    while(n-->0){
+        cin>>a;
+        v.clear();    
+        for(int i=0;i<a;i++){
+        cin >> b>>str;
+        v.push_back({b,str});
+        }
+        sort(v.begin(),v.end());
+        vector<pair<int, string> >::iterator iter;
+        iter=v.end()-1;
+        cout<<iter->second<<'\n';
+        
+        }
+	
+#pairÎ•º Ïïà Ïì∞Î©¥,
+	#include<stdio.h>
+
+int main(void){
+	int n, m, i, j;
+	char a[100][21] = {};
+	scanf("%d", &n);
+	for(i=0; i<n; i++){
+		int b, l, max = 0;
+		scanf("%d", &m);
+		for(j=0; j<m; j++){
+			scanf("%d %s", &b, a[j]);
+			if(b > max){
+				max = b;
+				l = j;  //ÏµúÎåÄÍ∞í ÎπÑÍµê,Ï†ïÎ†¨
+			}
+		}
+		printf("%s\n", a[l]);
+	}
 }
