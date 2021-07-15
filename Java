@@ -1,0 +1,29 @@
+#평균 ,최빈값 구하기
+    int max;
+		int [] ar=new int[10];
+		int [] arr=new int[10];
+		int sum=0;
+		int index=0;
+	for(int i=0;i<10;i++) {
+		
+		int n=sc.nextInt();
+		sum+=n;
+		ar[i]=n;
+	}
+	max=arr[0];
+	for(int i=0;i<arr.length;i++)
+		for(int j=0;j<arr.length;j++) {
+		if(ar[i]==ar[j])	
+			arr[i]++;
+				
+		if(arr[i]>max) {
+			max=arr[i];
+			index=i;
+		}
+		}
+	System.out.println(sum/10);
+	System.out.println(index);
+	System.out.println(ar[index]);
+	}	
+	}
+  //이렇게 하긴 보단 Arrays.sort 정렬을 한 다음에 전과 후의 값을 비교하면 더 빠르다.
