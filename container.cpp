@@ -171,3 +171,20 @@ int main(void){
 		printf("%s\n", a[l]);
 	}
 }
+## 상수->문자열 ->뒤집기 ->상수
+#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int rev(int n) {
+	string s = to_string(n);
+	reverse(s.begin(), s.end());
+	return atoi(s.c_str());
+}
+
+int main() {
+	int a,b;
+	cin >> a>>b;
+    cout<<max(rev(a),rev(b)); 
+}
