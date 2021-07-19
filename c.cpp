@@ -33,3 +33,36 @@ int main() {
     }
     return 0;
 }
+//국영수
+#include<ostream>
+#include <iostream>
+#include <vector>
+#include <algorithm> 
+ using namespace std;
+ static vector<pair<pair<string,int>,pair<int,int>>> v;
+     bool sorting(pair<pair<string,int>,pair<int,int>> a,pair<pair<string,int>,pair<int,int>> b) {
+    if (a.first.second == b.first.second){
+          if(a.second.first==b.second.first){
+          		if(a.second.second==b.second.second){
+               return a.first.first<b.first.first;
+          		}
+                return a.second.second>b.second.second;
+          }
+           return a.second.first<b.second.first;
+           }
+     return a.first.second > b.first.second;  
+    }
+    int main() { 
+    int n,k,e,m;
+    string name;
+    cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>name>>k>>e>>m;
+        v.push_back(make_pair(make_pair(name,k),make_pair(e,m)));      
+    }  
+    
+    sort(v.begin(),v.end(),sorting);
+    for(auto x:v)
+       cout<<x.first.first<<'\n';
+   return 0;
+}
