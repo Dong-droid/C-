@@ -55,3 +55,30 @@ void dfs(int idx, int sum) {
 int main(void) {
 	scanf("%d %d", &n, &s); for (int i = 0; i < n; i++) scanf("%d", &arr[i]); dfs(0, 0); printf("%d", ans);
 }
+//0807
+//15513
+//나눗셈을 사용하지 말 것 -> 오차 발생 --> 구조체 사용  
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+int N;vector<pair<long double,int>> v;
+vector <int> vec;
+bool compare(pair<long double,int> a,pair<long double,int> b){
+   if((a.first==b.first)&&a.second<b.second) return true;
+   if(a.first>b.first) return true;
+   return false;
+}
+int main() {
+   cin>>N;int w=0,q=0;
+   long double p=0;
+   for(int i=1;i<=N;i++) {
+      cin>>w>>q;
+      p=1-(long double)q/10000.0;
+      v.push_back({w/p,i});
+   }
+   sort(v.begin(),v.end(),compare);
+   for(auto i : v)
+      cout<<i.second<<" ";
+   return 0;
+}
