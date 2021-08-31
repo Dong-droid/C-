@@ -1,0 +1,39 @@
+#include <iostream>
+using namespace std;
+//9개로 계속 나눈다
+int N; int mone,zero,one;
+int arr[2187][2187];
+void addNum(int x,int y){
+      if(arr[x][y]==-1) mone++;
+      else if(arr[x][y]==0) zero++;
+      else if(arr[x][y]==1)one++;
+      return; 
+}
+bool isSame(int x,int y,int size){
+   for(int i=x;i<x+size;i++){
+      for(int j=y;j<y+size;j++){
+         if(arr[x][y]!=arr[i][j]) return false;
+      }
+   }
+   return true;
+}
+void sol(int x,int y, int size){
+   if(size==1||isSame(x,y,size)) {
+      addNum(x,y);
+      return; 
+   }
+   for(int i=x;i<x+size;i+=size/3){
+      for(int j=y;j<y+size;j+=size/3){
+         sol(i,j,size/3);   
+      }
+   }
+}
+int main() {
+   cin>>N;
+   for(int i=0;i<N;i++)
+      for(int j=0;j<N;j++)
+         cin>>arr[i][j];
+   sol(0,0,N);
+   cout<<mone<<'\n'<<zero<<'\n'<<one;
+   return 0;
+}
