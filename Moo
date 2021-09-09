@@ -65,3 +65,23 @@ int main() {
    }
    for(auto e:s) cout<<e<<'\n';
 }
+//find(iterator ,iterator, ??)
+#include<algorithm> //find 함수 
+#include <iostream>
+#include <vector>
+using namespace std;
+int N,M; int arr[200000];
+int main() {
+    ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+	int *p;
+	cin>>N;
+	for(int i=0;i<N;i++) cin>>arr[i];
+	cin>>M;
+	for(int i=0;i<M;i++){
+		int k=0;cin>>k;
+		p=find(arr,arr+N,k);
+		if(p!=arr+N) cout<<'1'<<'\n';
+		else cout<<'0'<<'\n';
+	}
+	return 0;
+}
