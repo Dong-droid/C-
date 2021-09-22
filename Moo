@@ -103,3 +103,87 @@ int main()
 	}
 	printf("%d",dy[n]);
 }
+//스도쿠 백트랙킹
+#include <iostream>
+using namespace std;
+int sudoku[10][10];
+void visit(int x,int y,bool visited[10])
+{
+	if(x==0) x=0;
+	else if(x==1) x=3;
+	else x=6;
+	if(y==0) y=0;
+	else if(y==1) y=3;
+	else y=6;
+	for(int i=x;i<x+3;i++)
+	{
+		for(int j=y;j<y+3;j++)
+		{
+			if(sudoku[i][j]!=0) visited[sudoku[i][j]]=1;
+		}
+	}	
+}
+bool line(int l,int n)
+{
+	for(int i=0;i<9;i++)
+	{
+		if(sudoku[i][l]==0) continue;
+		if(sudoku[i][l]==n) return false; 
+	}
+	return true;	
+}
+bool row(int r,int n)
+{
+	for(int i=0;i<9;i++)
+	{
+		if(sudoku[r][i]==0) continue;
+		if(sudoku[r][i]==n) return false; 
+	}
+	return true;
+}
+void sol(int x,int y) {
+	if(x>=9||y>=9)
+	{
+	 for(int i=0;i<9;i++){
+		for(int j=0;j<9;j++){
+			cout<<sudoku[i][j]<<" ";
+		}
+		cout<<'\n';
+	}
+	exit(0);
+	}
+	bool visited[10]={0};
+	visit(x/3,y/3,visited);//3.같은 정사각형 안에서
+	if(sudoku[x][y]==0)
+		{
+			for(int k=1;k<=9;k++)
+				{
+					if(!visited[k]&&row(x,k)&&line(y,k))
+					{
+						sudoku[x][y]=k;
+						visited[sudoku[x][y]]=1;
+						 
+						if(y==8)  sol(x+1,0);
+						else  sol(x,y+1);
+						sudoku[x][y]=0;
+						visited[sudoku[x][y]]=0;
+						continue;
+					}
+				}
+				if(sudoku[x][y]==0) return;
+		}
+	else 
+	{
+			if(y==8) sol(x+1,0);
+			else sol(x,y+1);
+			return;
+	}
+}
+int main() {
+	for(int i=0;i<9;i++)
+		for(int j=0;j<9;j++)
+			cin>>sudoku[i][j];
+	
+	sol(0,0);
+	return 0;
+}
