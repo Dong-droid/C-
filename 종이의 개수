@@ -37,3 +37,56 @@ int main() {
    cout<<mone<<'\n'<<zero<<'\n'<<one;
    return 0;
 }
+//15686 prev_permutaion
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+vector<pair<int,int>> home;
+vector<pair<int,int>> dak;
+
+vector<int> v;
+int map[51][51];
+int N,M;
+int ans=1000000000;
+int main() {
+	cin>>N>>M;
+	int n=0;
+	for(int i=0;i<N;i++){
+		for(int j=0;j<N;j++){
+		int x=0;
+		cin>>x;
+		if(x==1) home.push_back({i,j});
+		if(x==2) {n++;dak.push_back({i,j});}
+		}
+ 	}
+ //	cout<<n<<'\n';
+ 	for(int i=0;i<n;i++){
+ 		if(i<M) v.push_back(1);
+ 		else v.push_back(0);
+ 	}
+ 
+	do{	
+		int dist[110]={0};
+		int sum=0;
+		for(int i=0;i<dak.size();i++){
+			if(v[i]!=1) continue;
+			int x=dak[i].first;
+			int y=dak[i].second;
+			int j=0;
+				for(auto [u,v]:home){
+					int temp=abs(u-x)+abs(y-v);
+					if(!dist[j]) dist[j]=temp;
+					else if(dist[j]>temp) dist[j]=temp;
+					j++;
+				}
+		}
+		for(int i=0;i<home.size();i++){
+		sum+=dist[i];
+		}
+		ans=min(ans,sum);
+	}while(prev_permutation(v.begin(),v.end()));
+
+	cout<<ans;
+	return 0;
+}
