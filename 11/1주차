@@ -1,0 +1,69 @@
+//gcd(a+cd,d)=gcd(a,d)
+#include <iostream>
+using namespace std;
+using ll=long long; 
+ll gcd(ll x,ll y){
+	if(!y) return x;
+	return gcd(y,x%y);
+}
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+	ll a,d,q,x,l,r;
+	cin>>a>>d>>q;
+	ll g=gcd(a,d);
+	while(q--){
+		cin>>x>>l>>r;
+		if(x==1){
+			ll c=r-l+1;
+			ll b=(l+r-2)*d;
+			cout<<c*(b+2*a)/2<<'\n';      
+		}
+		else {
+			if(l==r) cout<<a+(l-1)*d<<'\n';
+			else cout<<g<<'\n';
+		}
+	}
+	return 0;
+}
+//등차수열의 합 또는 prefix sum
+vector<ll> pre(1010101);
+pre[1]=a;
+for(ll i=2;i<1010101;i++) pre[i]=pre[i-1]+a+(i-1)*d;
+
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+struct Guitar{
+	string num;	
+	int len;
+	int sum;
+};
+bool compare(struct Guitar &a, struct Guitar &b){
+	if(a.len!=b.len) return a.len<b.len;
+	if(a.sum!=-1&&b.sum!=-1) return a.sum<b.sum;
+	return a.num>b.num;
+}
+vector<Guitar> v;
+int main() {
+	int N;
+	cin>>N;
+	for(int i=0;i<N;i++){
+		string s;
+		int temp=-1;
+		cin>>s;
+		for(int i=0;i<s.length();i++){
+			if(s[i]>=0&&s[i]<=9) temp+=s[i];
+		}
+		v.push_back({s,s.length(),temp});
+	}
+	sort(v.begin(),v.end(),compare);
+	for (auto i : v){
+		cout<<i.num<<'\n';
+	}
+	return 0;
+}
