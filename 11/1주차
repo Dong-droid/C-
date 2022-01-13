@@ -67,3 +67,25 @@ int main() {
 	}
 	return 0;
 }
+#include <iostream>
+using namespace std;
+using ll=long long;
+ll gcd(ll x,ll y){
+	if(!y) return x;
+	return gcd(y,x%y);
+}
+ll ex_gcd(ll a,ll b,ll &x, ll &y){
+	if(!b){
+		x=1;y=0;
+		return a;
+	}
+	ll ret=ex_gcd(b,a%b,x,y);
+	ll temp=y;
+	y=x-(a/b)*y;
+	x=temp;
+	if(x<=0){
+		x+=b;
+		y-=a;
+	}
+	return ret;
+}
