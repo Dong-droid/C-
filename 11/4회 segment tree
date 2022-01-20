@@ -33,7 +33,7 @@ void solve(){
 	m+=k;
 	while(m--){
 		cin>>a>>b>>c;
-		if(a==1) update(1,0,n-1,b-1,c-1);
+		if(a==1) update(1,0,n-1,b-1,c);
 		else cout<<query(1,0,n-1,b-1,c-1)<<'\n';
 	}
 }
