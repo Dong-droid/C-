@@ -43,6 +43,40 @@ int main() {
 	while(tc--) solve();
 	return 0;
 }
+//min 
+#include <iostream>
+using namespace std;
+using ll=long long;
+const ll n_=3e6+100;
+ll n,m,k,tc=1,a,b,c;
+ll min_tree[n_],arr[n_];
+ll min_init(ll N,ll s ,ll e){
+	if(s==e) return min_tree[N]=arr[s];
+	ll mid=(s+e)/2;
+	return min_tree[N]=min(min_init(N*2,s,mid),min_init(N*2+1,mid+1,e));
+}
+
+ll min_query(ll N,ll s,ll e, ll l, ll r){
+	if(l>e || r<s) return 10000000001;
+	if(l<=s&&e<=r) return min_tree[N];
+	ll mid=(s+e)/2;
+	return min(min_query(N*2,s,mid,l,r),min_query(N*2+1,mid+1,e,l,r));
+}
+void solve(){
+	cin>>n>>m;
+	for(int i=0;i<n;i++) cin>>arr[i];
+	min_init(1,0,n-1);
+	while(m--){
+		cin>>a>>b;
+		cout<<min_query(1,0,n-1,a-1,b-1)<<'\n';
+	}
+}
+int main() {
+	ios::sync_with_stdio(0);
+	cin.tie(0);cout.tie(0);
+	while(tc--) solve();
+	return 0;
+}
 /////////////////////////////////////////////////////////
 /*lazy-propagation*/
 
