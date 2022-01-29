@@ -22,3 +22,102 @@ int main(){
    cout<<query(n,x)<<'\n';
    }
 }
+lca
+#include <iostream>
+#include <queue>
+using namespace std;
+int N,M;
+bool visited[50001];
+int depth[50001];
+vector<int> node[50001];
+int parent[50001];
+void solve(){
+	int t=1;
+	visited[1]=true;
+	queue<int> q;
+	q.push(1);
+	depth[1]=t;
+	while(!q.empty()){
+	t++;
+	int x=q.front();
+	q.pop();
+	for(auto c:node[x]){
+		if(visited[c]) continue;
+		parent[c]=x;
+		depth[c]=t;
+		q.push(c);
+		visited[c]=true;
+	}
+	}
+}
+int find(int a,int b){
+	if(depth[a]>depth[b]) swap(a,b);
+	if(parent[a]==parent[b]) return parent[a];
+	find(a,parent[b]);
+}
+int main() {
+	cin>>N;
+	for(int i=0,u,v;i<N;i++){
+		cin>>u>>v;
+		node[u].push_back(v);
+		node[v].push_back(u);
+	}
+	solve();
+	cin>>M;
+	while(M--){
+		int a,b;
+		cin>>a>>b;
+		cout<<find(a,b)<<'\n';
+	}
+	return 0;
+}
+//lca with sparse table
+#include <iostream>
+#include <queue>
+using namespace std;
+int N,M;
+int depth[100001];
+vector<int> node[100001];
+int parent[100001][21];
+
+void dfs(int x,int par){
+	depth[x]=depth[par]+1;
+	for(int nxt:node[x]){
+		if(nxt==par) continue;
+		parent[nxt][0]=x;
+		dfs(nxt,x);
+	}
+}
+int lca(int a,int b){
+	if(depth[a]>depth[b]) swap(a,b);
+	for(int i=20;i>=0;i--){
+		if(depth[b]-depth[a]>=(1<<i)) b=parent[b][i];
+	} //같은 깊이로 맞춰주기
+	if(a==b) return a;
+	for(int i=20;i>=0;i--){
+		if(parent[a][i]!=parent[b][i]){
+			a=parent[a][i];
+			b=parent[b][i];
+		}
+	}
+	return parent[a][0];
+}
+int main() {
+	cin>>N;
+	for(int i=1,u,v;i<N;i++){
+		cin>>u>>v;
+		node[u].push_back(v);
+		node[v].push_back(u);
+	}
+	dfs(1,0);
+	for(int i=1;i<21;i++)
+		for(int j=1;j<=N;j++)
+			parent[j][i]=parent[parent[j][i-1]][i-1];
+			cin>>M;	
+	while(M--){
+		int a,b;
+		cin>>a>>b;
+		cout<<lca(a,b)<<'\n';
+	}
+	return 0;
+}
