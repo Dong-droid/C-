@@ -1,0 +1,61 @@
+#include <iostream>
+using namespace std;
+/*17136 색종이 붙이기
+5 -> 4 -> 3 -> 2 -> 1*/
+int ans=100000000;
+bool solve(int x,int y,int k,int map[11][11]){
+	for(int i=x;i<x+k;i++){
+		for(int j=y;j<y+k;j++){
+			if(!map[i][j]) return false;
+		}
+	}
+	for(int i=x;i<x+k;i++){
+		for(int j=y;j<y+k;j++){
+			map[i][j]=0;
+		}
+	}
+	return true;
+}
+void recursive(int x,int y,int map[11][11],int count[6],int num){
+	cout<<'\n'<<x<<" "<<y<<" "<<num<<'\n';
+	if(num==0){
+	int temp=0;
+	for(int i=1;i<=5;i++){
+		cout<<count[i]<<" ";
+		if(count[i]>5) count[i]=10000;
+		temp+=count[i];
+	}
+	ans=min(ans, temp);
+	return;
+	}
+	cout<<num;
+	for(int i=x;i<10;i++){
+		for(int j=y;j<10;j++){
+			if(map[i][j]) {
+				for(int t=5;t>0;t--) {
+					if(solve(i,j,t,map)){
+					//	cout<<i<<j<<t<<'\n';
+						num-=t*t;
+						count[t]++;
+						recursive(i,j,map,count,num);
+						
+					}
+				}
+		}
+	}
+	}
+}
+int main() {
+	int num=0;
+	int map[11][11];
+	int count[6]={0};
+	for(int i=0;i<10;i++){
+		for(int j=0;j<10;j++){
+			cin>>map[i][j];
+			if(map[i][j])num++;
+		}
+	}
+	recursive(0,0,map,count,num);
+	cout<<ans;
+	return 0;
+}
