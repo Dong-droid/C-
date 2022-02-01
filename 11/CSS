@@ -1,0 +1,51 @@
+//타잔 알고리즘
+
+ll V,E,n,m,a,b,c,d,x,y,cnt;
+ll dfsn[n_],SN,sn[n_]; //dfsn : 방문 순서를 저장하는 배열 , SN: SCC Number , sn[] i번 정점을 포함하는 SCC 번호
+
+vector<ll> v[n_];
+vector<vector<ll>> SCC;
+stack<ll> st;
+bool fin[n_];// i번째 정점에서 SCC 추출이 끝났는 지 확인하는 배열
+
+ll dfs(ll x){
+dfsn[x]=++cnt; //방문순서 저장
+st.push(x);
+ll ret=dfsn[x];
+for(ll nxt : v[x]){
+if(!dfsn[nxt]) ret=min(ret,dfs(nxt)); //방문 안 했으면 방문하기 최소로 하는 이유는 front edge, cross edge 무시
+else if(!fin[nxt]) ret=min(ret,dfsn[nxt]); //방문했지만 끝나지 않았으면 (back edge) 방문하기
+}
+if(ret==dfsn[x]){ // 더 이상 위로 올라갈 수 없다
+vector<ll> currSCC;
+while(1){
+  ll a=st.top();
+  st.pop();
+  currSCC.push_back(a);
+  fin[a]=true; //true
+  sn[a]=SN; 
+  if(a==x) break;
+}
+  sort(currSCC.begin(),currSCC.end());
+  SCC.push_back(currSCC);
+  SN++;
+}
+int main(){
+ios_base::sync_with_stdio(0);
+cin.tie(0);cout.tie(0);
+cin>>V>>E;
+while(E--){
+cin>>a>>b;
+v[a].push_back(b); //단방향 그래프
+}
+for(int i=1;i<=V;i++)
+  if(!dfsn[i]) dfs(i); // 방문하지 않았으면 방문한다
+  
+  sort(SCC.begin(),SCC.end());
+  cout<<SN<<'\n';
+  for(auto cur:SCC){
+    for(auto c:cur) 
+        cout<<c<<" ";
+    cout<<"-1"<<'\n';
+ }
+}
