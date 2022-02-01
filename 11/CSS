@@ -1,3 +1,10 @@
+#include <iostream>
+#include <vector>
+#include <stack>
+#include <algorithm>
+#define n_ 10001
+using ll=long long;
+using namespace std;
 //타잔 알고리즘
 
 ll V,E,n,m,a,b,c,d,x,y,cnt;
@@ -29,6 +36,8 @@ while(1){
   sort(currSCC.begin(),currSCC.end());
   SCC.push_back(currSCC);
   SN++;
+}
+return ret;
 }
 int main(){
 ios_base::sync_with_stdio(0);
