@@ -1,0 +1,11 @@
+int a[mxn];
+vector<int> xlist;
+cin>>N;
+for(int i=0;i<N;i++){
+  cin>>a[i];
+  xlist.push_back(a[i]);
+}
+sort(xlist.begin(),xlist.end());
+xlist.erase(unique(xlist.begin(),xlist.end()),xlist.end());
+for(int i=0;i<N;i++)
+  a[i]=1+(lower_bound(xlist.begin(),xlist.end(),a[i])-xlist.begin());
