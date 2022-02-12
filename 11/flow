@@ -41,6 +41,7 @@ int Edmond_Karp(int source,int sink){
 			flow[i][bef]-=min_cap;
 		}
 	}
+	return max_flow;
 }
 int main() {
 	ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
