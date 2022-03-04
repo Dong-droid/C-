@@ -28,3 +28,22 @@ int main() {
 	for(ll nxt:ans)cout<<nxt<<'\n';
 	return 0;
 }
+#include <iostream>
+#include <vector>
+using ll=long long;
+using namespace std;
+ll fail[1000010];
+ll N,m;
+string T;
+int main() {
+	cin>>N;
+	cin>>T;
+
+	for(int i=1,j=0;i<T.size();i++){
+		while(j>0 && T[i]!=T[j]) j=fail[j-1];
+		if(T[i]==T[j]) fail[i]=++j;
+	}
+	if(fail[N-1]) cout<<N-fail[N-1];
+	else cout<<N;
+	return 0;
+}
