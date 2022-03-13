@@ -1,0 +1,38 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+using namespace std;
+int N,K;
+int in_dg[32010];
+
+vector<int> v[32010];
+
+void solve(){
+	while(true){
+	queue<int> q;
+	for(int i=1;i<=N;i++){
+		if(in_dg[i]==0) q.push(i);
+	}
+	if(q.empty()) return;
+	while(!q.empty()){
+		int x=q.front();
+		cout<<x<<" ";
+		in_dg[x]=-1;
+		q.pop();
+		for(int i:v[x]){
+			in_dg[i]--;
+		}
+	}
+	}
+	return;
+}
+int main() {
+	cin>>N>>K;
+	for(int i=0,u,x;i<K;i++){
+		cin>>u>>x;
+		in_dg[x]++;
+		v[u].push_back(x);
+	}
+	solve();
+	return 0;
+}
