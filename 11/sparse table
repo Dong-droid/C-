@@ -53,7 +53,7 @@ void solve(){
 int find(int a,int b){
 	if(depth[a]>depth[b]) swap(a,b);
 	if(parent[a]==parent[b]) return parent[a];
-	find(a,parent[b]);
+	return find(a,parent[b]);
 }
 int main() {
 	cin>>N;
