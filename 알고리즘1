@@ -1,3 +1,39 @@
+//다리
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+using ll = long long;
+ll T,N,M;
+
+int main()
+{
+ // ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+  cin>>T;
+  while(T--){
+    cin>>N>>M;
+    vector<pair<ll,ll>> l(N+M);
+    ll p = 0, q = 0,res = 0, ans, np = N, nq = M, i = 0;
+    
+  for(int i = 0; i < N; i++) {
+      cin>>p; l[i] = {p,1}; //구조체 사용 시 깔끔함
+  }
+  for(int i = N; i < N+M; i++){ 
+      cin>>p; l[i] = {p,0};
+  }
+  sort(l.begin(),l.end(),greater<>());
+  for(i = 0; i <= N+M; i++){ 
+      res = (N - 2 * np) * M + (M - 2 * nq) * N;
+      if(res > 0) {i--;break;}
+      if(l[i].second) np--;
+      else nq--;
+  } 
+  printf("%d.0\n",l[i].first);
+  }
+    return 0;
+}
+
+//통학 버스
 #include <iostream>
 #include <vector>
 #include <algorithm>
