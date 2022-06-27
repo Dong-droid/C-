@@ -82,3 +82,38 @@ int main()
     cout<<ans;
     return 0;
 }
+//나무 막대
+#include <iostream>
+#include <algorithm>
+using namespace std;
+struct data{int l,w;} arr[5010];
+int T,N;
+
+bool comp(struct data d1,struct data d2) {if(d1.l == d2.l) return d1.w < d2.w; else return d1.l < d2.l;}
+
+int main()
+{
+   cin>>T;
+   while(T--){
+       int warr[5010] = {0};
+       int m = 0, idx, now;
+       cin>>N;
+       for(int i = 0,a,b ; i < N; i++){
+           cin>>a>>b;
+           arr[i] ={a,b};
+       }
+       sort(arr,arr+N,comp);
+       m = 1; warr[0] = arr[0].w;
+       for(int i = 1 ; i < N ; i++){
+           now = -1; idx = m;
+           for(int j = 0 ; j < m; j++) if(warr[j] <= arr[i].w && warr[j] > now){    // 핵심! 같거나 크면서 가장 차가 작은 값을 구하기
+               now = warr[j]; idx = j;
+           }
+           if(idx == m) warr[m++] = arr[i].w;
+           else warr[idx] = arr[i].w;
+       }
+       cout<<m<<'\n';
+   }
+
+    return 0;
+}
