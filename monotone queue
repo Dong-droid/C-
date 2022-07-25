@@ -1,0 +1,55 @@
+//11003 최솟값 찾기
+#include <iostream>
+#include <deque>
+#include <vector>
+using namespace std;
+
+int N,L;
+deque<pair<int,int>> dq; // 값, 인덱스
+
+int main()
+{
+    ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+    cin>>N>>L;
+    
+    for(int i = 0 ; i < N; i++){
+        int a; cin>>a;
+        while(!dq.empty() && dq.front().second < i - L + 1) dq.pop_front();
+        while(!dq.empty() && dq.back().first > a) dq.pop_back();
+        dq.push_back({a,i});
+        
+        cout<<dq.front().first<<" ";
+    }
+    
+    return 0;
+}
+
+// 15678 연세 워터 파크
+#include <iostream>
+#include <deque>
+using namespace std;
+using ll = long long;
+ll N, D, ans = -1000000000;
+ll A[100010];
+ll dp[100010];
+deque<pair<ll,ll>> dq; 
+
+int main()
+{
+    ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+    
+    cin>>N>>D;
+    for(int i= 0; i < N; i++) cin>>A[i];
+    
+    for(int i = 0; i < N; i++){ 
+        while(!dq.empty() && dq.front().first < i - D) dq.pop_front();
+        dp[i] = A[i];
+        if(!dq.empty()) dp[i] = max(dp[i], dp[i] + dq.front().second); 
+        while(!dq.empty() && dq.back().second < dp[i]) dq.pop_back();
+        dq.push_back({i,dp[i]});
+       // cout<<i<<" "<<dp[i]<<'\n';
+        ans = max(ans, dp[i]);
+    }
+    cout<<ans;
+    return 0;
+}
