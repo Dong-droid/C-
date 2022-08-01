@@ -1,0 +1,158 @@
+/**********************************************
+//DP on DAG BOJ ACM CRAFT 1005 
+**********************************************/
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+int T,N,K,W;
+int in_dg[1010];
+
+void topo_sort(int order[], vector<int> edge[]){
+	order++;
+	while(true){
+	queue<int> q;
+	for(int i=1;i<=N;i++){
+		if(in_dg[i]==0) q.push(i);
+	}
+	if(q.empty()) return;
+	while(!q.empty()){
+		int x=q.front();
+		*order++ = x;
+		in_dg[x]=-1;
+		q.pop();
+		for(int i: edge[x]){
+			in_dg[i]--;
+		}
+	}
+	}
+}
+
+int main()
+{
+    ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+    cin>>T;
+    while(T--){
+        //입력받기
+        cin>>N>>K;
+        int A[N+10] = {0};
+        vector<int> edge[N+10];
+        vector<int> v[N+10];
+        int order[1010];
+        int dp[N+10] = {0};
+        
+        for(int i = 1; i <= N; i++) {cin>>A[i]; in_dg[i] = 0;}
+        for(int i = 0,a,b; i < K; i++) {
+            cin>>a>>b;
+            in_dg[b]++;
+            edge[a].push_back(b);
+            v[b].push_back(a);
+        }
+        cin>>W;
+        //위상 정렬
+         topo_sort(order,edge);
+        //dp on DAG
+        for(int i = 1; i <= N; i++){
+          //  cout<<order[i]<<'\n';
+            int p = order[i];
+            int mx = 0;
+            for(auto j : v[p]) mx = max(mx, dp[j]);
+            dp[p] = mx + A[p];
+          //  cout<<p<<" "<<dp[p]<<'\n';
+            if(p == W) {cout<<dp[p]<<'\n';break;}
+        }
+    }
+    return 0;
+}
+
+/******************************************************************************
+BOJ 11066 팰린드롬?
+*******************************************************************************/
+#include <iostream>
+#include <cstring>
+using namespace std;
+int T, N;
+int A[510];
+int dp[510][510];
+int inf = 5000001;
+int main()
+{
+    cin>>T;
+    while(T--){
+        cin>>N;
+        int s,e,m,cost = 0;
+        for(int i = 1; i <= N; i++) cin>>A[i];
+        
+        memset(dp,inf,sizeof(dp));
+        for(int i = 1; i <= N; i++) dp[i][i] = 0;
+        
+        for(int l = 2; l <= N; l++){
+            for(s = 1; s <= N - l + 1; s++){
+                e = s + l - 1;
+                cost = 0;
+                for(int i = s; i <= e; i++) cost += A[i];
+                for(m = s; m < e; m++) dp[s][e] = min(dp[s][e], dp[s][m] + dp[m+1][e] + cost);
+            }
+        }
+        cout<<dp[1][N]<<'\n';
+    }
+    return 0;
+}
+
+/******************************************************************************
+BOJ 10942 
+dp[s][e]  = dp[s+1][e-1] && (A[s] == A[e])
+*******************************************************************************/
+
+#include <iostream>
+
+using namespace std;
+int N,M;
+int A[2001];
+bool dp[2001][2001];
+int main()
+{
+    ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+    cin>>N;
+    for(int i = 0; i < N; i++) {
+        cin>>A[i];
+        dp[i][i] = 1;
+    }
+
+    for(int e = 1; e < N; e++){
+        for(int s = e - 1; s >= 0; s--){
+            if(e - s == 1) dp[s][e] = (A[s] == A[e]);
+            else dp[s][e] = dp[s+1][e-1] && (A[s] == A[e]);
+        }
+    }
+    cin>>M;
+    while(M--){
+        int a,b; cin>>a>>b;
+        cout<<dp[a-1][b-1]<<'\n';
+    }
+    return 0;
+}
+/******************************************************************************
+BOJ 13250 주사위 게임
+각 사건이 벌어졌을 때의 이득과
+그 사건이 벌어질 확률을 곱한 것을
+전체 사건에 대해 합한 값
+*******************************************************************************/
+
+#include <iostream>
+
+using namespace std;
+int N;
+double dp[1000001];
+int main()
+{
+    cout.precision(16);
+    cin>>N;
+    for(int i = 1; i <= N; i++){
+        for(int k = 1; k <= 6; k++){
+            dp[i] += (dp[i-k] + 1) / 6.0;
+        }
+    }
+    cout<<dp[N];
+    return 0;
+}
