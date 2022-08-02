@@ -156,3 +156,42 @@ int main()
     cout<<dp[N];
     return 0;
 }
+/******************************************************************************
+행렬곱셈순서
+dp[s][e] = min(dp[s][e],dp[s][m] + dp[m+1][e] + v[s].a*v[m].b*v[e].b)
+
+*******************************************************************************/
+
+#include <iostream>
+#include <vector>
+#include <cstring>
+using namespace std;
+struct data{int a,b;};
+int N;
+int dp[510][510];
+vector<struct data> v;
+
+int main()
+{
+    ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+    cin>>N;
+    v.push_back({0,0});
+    for(int i = 0; i < N; i++){
+        int a,b;
+        cin>>a>>b;
+        v.push_back({a,b});
+    }
+    
+    for(int l = 1; l <= N; l++) { // 구간의 길이 1 ~ N
+        for(int s = N - l + 1; s >= 1; s--){
+            int e = s + l - 1;
+            dp[s][e] = 1000000000;
+            if(l == 1) {dp[s][s] = 0; continue;}
+            for(int m = s; m <= e; m++) {
+                dp[s][e] = min(dp[s][e],dp[s][m] + dp[m+1][e] + v[s].a * v[m].b * v[e].b);
+                //cout<<dp[s][m]<<" "<<dp[m+1][e]<<" "<<v[s].a * v[m].b * v[e].b<<'\n';
+            }
+        }
+        }
+    cout<<dp[1][N];
+}
