@@ -94,3 +94,69 @@ int main() {
 	return 0;
 }
 
+/******************************************************************************
+
+ 13306 Union-Find + Offline query
+
+*******************************************************************************/
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int p[200010];int par[200010]; int h[200010];
+int N,Q,a,b,c;
+struct query{int a,b,c;};
+vector<struct query> v;
+vector<string> res;
+
+int Find(int u)
+{
+	if(p[u]==-1) return u;
+	return p[u] = Find(p[u]);
+}
+void Union(int u,int v)
+{
+	u=Find(u); v=Find(v);
+    if(h[u]<h[v]) swap(u,v);
+    p[v]=u;
+    if(h[u]==h[v]) h[u]++;
+}
+int main() {
+	ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+	cin>>N>>Q;
+	for(int i = 1; i <= N; i++) p[i] = -1;
+	for(int i=2;i<=N;i++)
+	{
+		int parent; cin>>parent;
+		par[i] = parent;
+	}
+	int sz =Q + N -1;
+	while(sz--)
+	{
+		int a;cin>>a;
+		if(a == 1) {
+		    cin>>b>>c;
+		    v.push_back({1,b,c});
+		}
+		else {
+		    cin>>b;
+		    v.push_back({0,b,0});
+		}
+	}
+
+	for(int i = Q+N-2; i >= 0; i--){
+	    int x = v[i].a, y = v[i].b, z = v[i].c;
+	 //   cout<<x<<" "<<y<<" "<<z<<'\n';
+	    if(x == 0) {
+	      //  cout<<p[y]<<" ";
+	        Union(y,par[y]);
+	    }
+	    else{
+	        if(Find(y) == Find(z)) res.push_back("YES");
+	        else res.push_back("NO");
+	    } 
+	}
+	for(int i = res.size()-1; i>=0; i--) cout<<res[i]<<'\n';
+	return 0;
+}
