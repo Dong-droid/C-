@@ -100,3 +100,33 @@ int main() {
 	}
 	return 0;
 }
+/*******************
+BOJ 이항계수 3
+
+n!/ k!(n-k)! % 100...7 (소수)
+-> k!(n-k)!의 모듈로 역원은 (k!(n-k)!)^(100...7-2)
+********************/
+#include <iostream>
+using namespace std;
+using ll=long long;
+ll f[4000001];
+ll M = 1000000007; // M이 소수임
+//분할 정복을 이용해서 a^(M-2)를 구해주기
+ll sol(ll a, ll p){
+    if(p == 1) return a;
+    ll b = sol(a,p/2);
+    if(p % 2 == 0) {
+        return (b * b) % M;
+    }
+    else{
+        return ((b * b) %M * a) % M;
+    }
+}
+int main() {
+	ll N,K,x=0,y=0;
+	cin>>N>>K;
+    f[0] = f[1] = 1; 
+    for(int i = 2; i <=N; i++) f[i] = (i * f[i-1]) % M;
+    cout<<f[N] * sol((f[K] * f[N-K]) % M,M-2) % M; 
+	return 0;
+}
