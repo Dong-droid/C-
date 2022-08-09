@@ -195,3 +195,39 @@ int main()
         }
     cout<<dp[1][N];
 }
+/******************************************************************************
+
+                  greedy + dp
+
+*******************************************************************************/
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#define inf 50000000000
+using namespace std;
+using ll = long long;
+int N;
+ll dp[5010][5010];
+ll ans;
+struct data{
+    ll e,c;
+    bool operator < (data chs) {return c < chs.c;}
+} arr[5010];
+int main()
+{
+    ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+    cin >> N; 
+    for(int i = 1; i <= N; i++) cin>>arr[i].e;
+    for(int i = 1; i <= N; i++) cin>>arr[i].c;
+    sort(arr + 1, arr + N + 1);
+    memset(dp, -inf, sizeof(dp));    
+    for(ll i = 1; i <= N; i++){
+        for(ll j = N-1; j >= 0; j--){
+            dp[i][j] = max(dp[i-1][j],max(0LL,dp[i-1][j+1]+ arr[i].e - j * arr[i].c));
+        }
+    }
+    for(int i = 1; i <= N; i++) ans = max(ans, dp[i][0]);
+    cout<<ans;
+    return 0;
+}
