@@ -52,3 +52,41 @@ int main(){
 	cout<<ans;
 }
 code from rebro
+/***********************************************
+ BOJ 개미굴
+ map사용법은 -> https://life-with-coding.tistory.com/305
+***********************************************/
+#include <iostream>
+#include <vector>
+#include <map>
+using namespace std;
+
+struct Trie{
+    map<string, Trie> ch; //key ,value
+    void insert(const vector<string> &vec, int idx = 0){
+        if(idx == vec.size()) return;
+        auto it = ch.find(vec[idx]); // key 탐색
+        if(it == ch.end()) it = ch.emplace(vec[idx],Trie()).first;
+        it->second.insert(vec, idx+1);
+    }
+    void print(int dep = 0){
+        for(auto &[s,nxt] : ch){
+            cout<<string(dep*2, '-') << s <<'\n'; // string (,)
+            nxt.print(dep+1);
+        }
+    }
+};
+
+int main()
+{
+    int N; cin>>N;
+    Trie T;
+    for(int i = 1; i <= N; i++){
+        int K; cin>>K;
+        vector<string> v(K);
+        for(auto &s : v) cin>>s;
+        T.insert(v);
+    }
+    T.print();
+    return 0;
+}
