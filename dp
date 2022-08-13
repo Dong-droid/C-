@@ -231,3 +231,65 @@ int main()
     cout<<ans;
     return 0;
 }
+/******************************************************************************
+
+                             bit dp 
+                             BOJ 4001 컨닝
+*******************************************************************************/
+
+#include <iostream>
+#include <vector>
+#include <cstring>
+using namespace std;
+char grid[11][11];
+int N,M;
+bool check1(int curr, int prv){ //대각선 확인
+    for(int i = 0; i < M; i++){
+        if(curr & (1 << i)){ // 앉아있고
+            if(i > 0 && prv & (1 << (i-1))) return false;// 왼쪽 대각선에 앉아 있거나 
+            if(i < M-1 && prv & (1 <<(i+1))) return false; // 오른쪽 대각선에 앉아 있으면
+        }
+    }
+    return true;
+}
+bool check2(int row, int state){ // 앉을 수 없는 자리 x인지
+    for(int i = 0; i < M; i++){
+        if(state & (1 << i) && grid[row][i] == 'x') return false;
+    }
+    return true;
+}
+int main()
+{
+    int T;
+    cin>>T;
+    while(T--){
+    int ans = 0; 
+    cin>>N>>M;
+    int dp[N+1][(1 << M)] = {0};
+    memset(dp,0,sizeof(dp));
+    for(int i = 0; i < N; i++) for(int j = 0; j < M; j++) cin>>grid[i][j];
+    vector<pair<int,int>> cand; // 상태, 학생 수
+   
+   for(int i = 0; i < (1 << M); i++){
+       bool flag = 1;
+       int cnt = i & 1;
+       for(int j = 1; j < M; j++){
+           if((i & (1 << j)) && (i & (1 << (j-1)))) flag = 0; // 인접하게 앉아있으면 제외
+           if(i & (1 << j)) cnt++;
+       }
+       if(flag) cand.push_back({i,cnt});
+   } 
+   for(auto i : cand) if(check2(0,i.first)) dp[0][i.first] = i.second;
+   for(int i = 1; i < N; i++){
+   for(auto [x,y] : cand){
+       if(!check2(i,x)) continue;
+       for(auto[m,n] : cand){
+            if(check1(x,m)) dp[i][x] = max(dp[i][x],dp[i-1][m] + y);
+       }
+   }
+   }
+   for(auto i : cand) ans = max(ans, dp[N-1][i.first]);
+   cout<<ans<<'\n';
+}
+    return 0;
+}
