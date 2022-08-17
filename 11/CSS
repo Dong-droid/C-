@@ -58,3 +58,84 @@ for(int i=1;i<=V;i++)
     cout<<"-1"<<'\n';
  }
 }
+/******************************************************************************
+
+2-sat
+
+*******************************************************************************/
+#include <iostream>
+#include <vector>
+#include <stack>
+#include <algorithm>
+using namespace std;
+using ll = long long;
+const ll n_ = 5e5 + 100, inf = 1e9 + 1, mod = 1e9 + 7, sqrtN = 320;
+ll n,m,k,tc = 1,a,b,c,d,t_c;
+ll dfsn[n_], SN, sn[n_], cnt, fin[n_];
+vector<ll> v[n_];
+vector<vector<ll>> SCC;
+stack<ll> st;
+ll dfs(ll x){
+    dfsn[x] = ++cnt;
+    st.push(x);
+    ll ret = dfsn[x];
+    for(auto nxt : v[x]){
+        if(!dfsn[nxt]) ret = min(ret, dfs(nxt));
+        else if(!fin[nxt]) ret = min(ret, dfsn[nxt]);
+    }
+    if(ret == dfsn[x]){
+        vector<ll> cur;
+        while(1){
+            a = st.top();
+            st.pop();
+            fin[a] = true;
+            sn[a] = SN;
+            cur.push_back(a);
+            if(a == x) break;
+        }
+        SCC.push_back(cur);
+        SN++;
+    }
+    return ret;
+}
+ll A[n_];
+ll rev(ll x){
+    if(x <= n) return x + n;
+    return x - n;
+}
+void solve(){
+    cin>>n>>m; // 변수의 개수와 절의 개수
+    while(m--){
+        cin>>a>>b;
+        if(a < 0) a = abs(a) + n; 
+        if(b < 0) b = abs(b) + n;
+        v[rev(a)].push_back(b);
+        v[rev(b)].push_back(a);
+    }
+    for(int i = 1; i <= 2 * n; i++){
+        if(dfsn[i]) continue; 
+        dfs(i);
+    }
+    for(int i = 1; i <= n; i++){
+        if(sn[i] == sn[i+n]){ // x , ~x 가 같은 SCC에 있다 -> 모순이다
+            cout<<'0';
+            return;
+        }
+    }
+    cout<<'1'<<'\n';
+    //타잔 알고리즘 특성상 scc의 번호가 클수록 dag에서 앞에 있음 (topology sort를 해도 됨)
+    reverse(SCC.begin(),SCC.end());
+    for(auto cur : SCC){
+        for(auto nxt : cur){
+            if(A[nxt]) continue;
+            A[nxt] = 0;
+            A[rev(nxt)] = 1;
+        }
+    }
+    for(int i = 1; i <= n; i++) cout<<A[i]<<" ";
+ }
+int main()
+{
+    solve();
+    return 0;
+}
