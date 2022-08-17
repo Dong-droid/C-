@@ -1,3 +1,4 @@
+/**********2150***********/
 #include <iostream>
 #include <queue>
 #include <vector>
@@ -35,4 +36,50 @@ int main() {
 	}
 	solve();
 	return 0;
+}
+/************************
+카사라주 알고리즘 2150
+*************************/
+
+
+#include <iostream>
+//카사라주 알고리즘
+using namespace std;
+int N,M,C[10101];
+vector<int> G[10101], R[10101], V;
+vector<vector<int>> S;
+
+void AddEdge(int s, int e){
+    G[s].push_back(e);
+    R[e].push_back(s);
+}
+void DFS1(int v){
+    C[v] = -1;
+    for(auto i : G[v]) if(!C[i]) DFS1(i);
+    V.push_back(v);
+}
+void DFS2(int v, int c){
+    C[v] = c; S.back().push_back(v);
+    for(auto i : R[v]) if(C[i] == -1) DFS2(i,c);
+}
+int GetSCC(){
+    for(int i = 1; i <= N; i++) if(!C[i]) DFS1(i);
+    reverse(V.begin(), V.end());
+    int cnt = 0;
+    for(auto i: V) if(C[i] == -1) S.emplace_back(), DFS2(i, ++cnt);
+    return cnt;
+}
+int main()
+{
+    cin>>N>>M;
+    for(int i = 1,s,e; i <= M; i++) cin>>s>>e, AddEdge(s,e);
+    int K = GetSCC();
+    for(auto &vec : S) sort(vec.begin(), vec.end());
+    sort(S.begin(), S.end());
+    cout<<K<<'\n';
+    for(const auto &vec : S){
+        for(auto i : vec) cout<<i <<" ";
+        cout<<-1<<'\n';
+    }
+    return 0;
 }
