@@ -80,4 +80,76 @@ int main() {
 /////////////////////////////////////////////////////////
 /*lazy-propagation*/
 
-...
+#include <iostream>
+using namespace std;
+using ll=long long;
+
+const ll n_=3e6+100;
+ll n,m,k,tc=1,a,b,c,d;
+ll tree[n_],arr[n_];
+ll lazy[n_];
+
+ll init(ll N, ll s ,ll e){
+	if(s==e) return tree[N] = arr[s];
+	ll mid = (s + e) / 2;
+	return tree[N] = init(N*2,s,mid) + init(N*2+1,mid+1,e);
+}
+
+void update_lazy(ll N, ll s, ll e){
+    if(!lazy[N]) return;
+    tree[N] += (e - s + 1) * lazy[N];
+    if(s != e){
+        lazy[N*2] += lazy[N];
+        lazy[N*2 + 1] += lazy[N];
+    }
+    lazy[N] = 0;
+}
+
+void update(ll N, ll s, ll e, ll l, ll r, ll val){ // update 할 구간 l r 보고 있는 구간 s e
+	update_lazy(N, s, e);                          // propagate
+	if(l > e || r < s) return;
+	if(l <= s && e <= r){                           // 완전히 포함되는 구간
+	    tree[N] += (e - s + 1) * val;
+	    if(s != e){                                 // lazy
+	        lazy[N * 2] += val;
+	        lazy[N * 2 + 1] += val;
+	    }
+	    return;
+	}
+
+	ll mid=(s+e)/2;
+	update(N*2,s,mid,l,r,val);
+	update(N*2+1,mid+1,e,l,r,val);
+	tree[N] = tree[N*2] + tree[N*2+1];
+}
+
+ll query(ll N,ll s,ll e, ll l, ll r){
+	update_lazy(N,s,e);
+	if(l > e || r < s) return 0;
+	if(l <= s && e <= r) return tree[N];
+	ll mid=(s+e)/2;
+	return query(N*2,s,mid,l,r)+query(N*2+1,mid+1,e,l,r);
+}
+void solve(){
+	cin>>n>>m>>k;
+	for(int i=0;i<n;i++) cin>>arr[i];
+	init(1,0,n-1);
+	m+=k;
+	while(m--){
+		cin>>a;
+		if(a==1){ 
+		    cin>>b>>c>>d;
+		    update(1,0,n-1,b-1,c-1,d);
+		}
+		else {
+		    cin>>b>>c;
+		    cout<<query(1,0,n-1,b-1,c-1)<<'\n';
+		}
+	}
+}
+int main() {
+	ios::sync_with_stdio(0);
+	cin.tie(0);cout.tie(0);
+	while(tc--) solve();
+	return 0;
+}
