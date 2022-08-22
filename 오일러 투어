@@ -1,0 +1,139 @@
+// BOJ 2820 자동차 공장
+#include <iostream>
+#include <vector>
+using namespace std;
+using ll=long long;
+const ll n_=3e6+100;
+ll n,m,k,tc=1,b,c; 
+char a;
+ll tree[n_],arr[n_], order[n_];
+vector<ll> child[n_];
+ll cnt;
+ll in[n_], out[n_];
+ll lazy[n_];
+void dfs(ll now) {
+    in[now] = ++cnt;
+    for(ll i : child[now]) dfs(i);
+    out[now] = cnt;
+}
+ll init(ll N,ll s ,ll e){
+	if(s==e) return tree[N] = order[s];
+	ll mid=(s+e)/2;
+	return tree[N]=init(N*2,s,mid)+init(N*2+1,mid+1,e);
+}
+void update_lazy(ll N, ll s, ll e){
+    if(!lazy[N]) return;
+    tree[N] += lazy[N];
+    if(s != e){
+        lazy[N*2] += lazy[N];
+        lazy[N*2 + 1] += lazy[N];
+    }
+    lazy[N] = 0;
+}
+void update(ll N,ll s,ll e,ll l, ll r, ll val){
+    update_lazy(N,s,e);
+	if(l > e||r < s) return;
+	if(l <= s && e <= r){                           // 완전히 포함되는 구간
+	    tree[N] += val;
+	    if(s != e){                                 // lazy
+	        lazy[N * 2] += val;
+	        lazy[N * 2 + 1] += val;
+	    }
+	    return;
+	}
+	ll mid=(s+e)/2;
+	update(N*2,s,mid,l,r,val);
+	update(N*2+1,mid+1,e,l,r,val);
+	tree[N] = tree[N*2]+tree[N*2+1];
+}
+ll query(ll N,ll s,ll e, ll id){
+    update_lazy(N,s,e);
+	if(id > e || id < s) return 0;
+	if(s == e && s == id)return tree[N];
+	ll mid=(s+e)/2;
+	return query(N*2,s,mid,id) + query(N*2+1,mid+1,e,id);
+}
+void solve(){
+	cin>>n>>m;
+	for(int i=1,p;i <=n; i++) {
+	    cin>>arr[i];
+	    if(i > 1) cin>>p, child[p].push_back(i); 
+	}
+	dfs(1);
+	for (int i = 1; i < n + 1; i++) {// 먼저 바꾼 다음
+		order[in[i]] = arr[i];
+	}
+	init(1,1,n); //초기화
+	while(m--){
+		cin>>a>>b;
+		if(a =='p') cin>>c, update(1,1,n,in[b] + 1,out[b],c);
+		else cout<<query(1,1,n,in[b])<<'\n';
+	}
+}
+int main() {
+	ios::sync_with_stdio(0);
+	cin.tie(0);cout.tie(0);
+	while(tc--) solve();
+	return 0;
+}
+// BOJ 18227 성대나라의 물탱크
+#include <iostream>
+#include <vector>
+using namespace std;
+using ll=long long;
+const ll n_=3e6+100;
+ll n,m,k,tc=1,a,b,c; 
+ll tree[n_],arr[n_], order[n_];
+vector<ll> child[n_];
+ll cnt;
+ll in[n_], out[n_];
+ll lazy[n_];
+ll depth[n_];
+void dfs(ll now, ll par) {
+    depth[now] = depth[par] + 1;
+    in[now] = ++cnt;
+    for(ll i : child[now]) {if(i == par) continue; dfs(i,now);}
+    out[now] = cnt;
+}
+ll init(ll N,ll s ,ll e){
+	if(s==e) return tree[N] = order[s];
+	ll mid=(s+e)/2;
+	return tree[N]=init(N*2,s,mid)+init(N*2+1,mid+1,e);
+}
+void update(ll N,ll s,ll e,ll id, ll val){
+	if(id > e||id < s) return;
+	if(s == e && s == id) {tree[N] += val; return;}
+	ll mid=(s+e)/2;
+	update(N*2,s,mid,id,val);
+	update(N*2+1,mid+1,e,id,val);
+	tree[N] = tree[N*2] + tree[N*2+1];
+}
+ll query(ll N,ll s,ll e, ll l, ll r){
+	if(l > e || r < s) return 0;
+	if(l <= s && e <= r) return tree[N];
+	ll mid=(s+e)/2;
+	return query(N*2,s,mid,l, r) + query(N*2+1,mid+1,e,l,r);
+}
+void solve(){
+	cin>>n>>m;
+	for(int i=1,u,v;i <n; i++) {
+	    cin>>u>>v;
+	    child[u].push_back(v);
+	    child[v].push_back(u);
+	}
+	dfs(m, 0);
+	cin>>k;
+	//for(int i = 1; i <= n; i++) cout<<in[i]<<depth[i]<<" ";
+	//init(1,1,n); //초기화
+	while(k--){
+		cin>>a>>b;
+		if(a == 1) update(1,1,n,in[b],1);
+		else cout<<depth[b] * query(1,1,n,in[b],out[b])<<'\n';
+	}
+}
+int main() {
+	ios::sync_with_stdio(0);
+	cin.tie(0);cout.tie(0);
+	while(tc--) solve();
+	return 0;
+}
